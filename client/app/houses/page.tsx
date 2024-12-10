@@ -7,10 +7,10 @@ const HousesPage = () => {
     const [homes, setHomes] = useState<IHome[]>([]);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/home/getHomesByUserId?userId=1")
+        fetch('/api/home/getHomesByUserId/1')
         .then(response => response.json())
         .then(data => {
-        setHomes(data);
+            setHomes(data);
         });
     }, [])
 
