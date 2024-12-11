@@ -4,6 +4,7 @@
 , @lastName nvarchar(100)
 , @displayName nvarchar(100)
 , @photoUrl nvarchar(250)
+, @newId int OUTPUT
 as
 begin
     begin transaction;
@@ -11,7 +12,7 @@ begin
     insert into dbo.[user] (email, firstName, lastName, displayName, photoUrl)
     values (@email, @firstName, @lastName, @displayName, @photoUrl)
 
-    select SCOPE_IDENTITY();
+    select @newId = SCOPE_IDENTITY();
 
     commit transaction;
 end

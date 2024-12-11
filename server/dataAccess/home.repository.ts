@@ -1,5 +1,3 @@
-// Functions for Home data access
-
 import sql = require('mssql');
 import { IHome } from '../interfaces/home.interface';
 var dbConfig = require("../config/dbConfig");

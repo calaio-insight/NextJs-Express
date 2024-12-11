@@ -5,7 +5,9 @@ const app = express();
 const cors = require('cors');
 const { PORT } = require('./config/config');
 
+
 const homeController = require('./controllers/home.controller');
+const userController = require('./controllers/user.controller');
 
 app.use(cors());
 
@@ -16,6 +18,7 @@ app.get('/api', (req, res) => {
 
 app.use(express.json());
 app.use('/api/home', homeController);
+app.use('/api/user', userController);
 
 
 // Start the server and listen on the specified port

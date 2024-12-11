@@ -2,15 +2,22 @@
 import { Container } from "react-bootstrap";
 import { NavbarComponent } from "./components/navbar.component";
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { homeApi } from '@/services/home/home.api';
+import { userApi } from "@/services/user/user.api";
 
+const rootReducer = combineReducers({
+    [homeApi.reducerPath]: homeApi.reducer,
+    [userApi.reducerPath]: userApi.reducer
+})
 const store = configureStore({
-    reducer: {
-      [homeApi.reducerPath]: homeApi.reducer
-    },
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) => 
-      getDefaultMiddleware().concat(homeApi.middleware)
+      getDefaultMiddleware().concat([
+        homeApi.middleware,
+        userApi.middleware
+    ])
   });
 
 const MainComponent = ({
@@ -19,12 +26,14 @@ const MainComponent = ({
     children: React.ReactNode;
   }>) => {
     return (
-        <Provider store={store}>        
-          <NavbarComponent />
-          <Container className={'mt-3'}>
-            {children}
-          </Container>
-        </Provider>
+        <GoogleOAuthProvider clientId="1038302492508-tlu4o4n6aa21oq9386ktesf6hj0t8vna.apps.googleusercontent.com">
+            <Provider store={store}>        
+            <NavbarComponent />
+            <Container className={'mt-3'}>
+                {children}
+            </Container>
+            </Provider>
+        </GoogleOAuthProvider>        
     )
 }
 

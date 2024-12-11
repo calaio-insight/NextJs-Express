@@ -11,6 +11,5 @@ export async function GET(req: Request, context: {params: { userId: string }}) {
     catch (err){
         console.log(err);
         return Response.json([]);   
-    }
-     
+    }     
 }
