@@ -1,28 +1,27 @@
 'use client';
-import {useEffect, useState} from 'react';
-import { IHome } from '../interfaces/home.interface';
+import { useGetHomesByUserIdQuery } from '@/services/home/home.api';
 
 
 const HousesPage = () => {
-    const [homes, setHomes] = useState<IHome[]>([]);
+    const { data:homes, isLoading, isError } = useGetHomesByUserIdQuery(1);
 
-    useEffect(() => {
-        fetch('/api/home/getHomesByUserId/1')
-        .then(response => response.json())
-        .then(data => {
-            setHomes(data);
-        });
-    }, [])
+    if (isError){
+        return (<div>There has been an error</div>);
+    }
 
     return (
         <div>
-            <div>
-                {homes?.map((home, index) => (
-                <div key={index}>
-                    {home.homeName}
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : (
+                <div>
+                    {homes?.map((home, index) => (
+                    <div key={index}>
+                        {home.homeName}
+                    </div>
+                    ))}
                 </div>
-                ))}
-            </div>
+            )}            
         </div>
     )
 }

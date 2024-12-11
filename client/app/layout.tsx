@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import  "bootstrap/dist/css/bootstrap.min.css";
-import { Container } from "react-bootstrap";
-import { NavbarComponent } from "./components/navbar.component";
+import MainComponent from "./main";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -21,6 +20,7 @@ export const metadata: Metadata = {
   description: "",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -29,10 +29,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NavbarComponent />
-        <Container className={'mt-3'}>
+        <MainComponent>
           {children}
-        </Container>
+        </MainComponent>
       </body>
     </html>
   );

@@ -1,11 +1,16 @@
-
-
 export async function GET(req: Request, context: {params: { userId: string }}) {
-    const userId = (await context.params).userId;
-    console.log(userId);
-
-    const data = await fetch("http://localhost:8080/api/home/getHomesByUserId?userId=1")
-            .then(response => {return response.json()});
+    try {
+        const userId = (await context.params).userId;
+        console.log(userId);
     
-    return Response.json(data);    
+        const data = await fetch("http://localhost:8080/api/home/getHomesByUserId?userId=1")
+                .then(response => {return response.json()});
+        
+        return Response.json(data);   
+    }
+    catch (err){
+        console.log(err);
+        return Response.json([]);   
+    }
+     
 }
