@@ -4,6 +4,7 @@ import { useLoginMutation } from '@/services/user/user.api';
 import { useEffect, useState } from 'react';
 import { IUser } from '../interfaces/user.interface';
 import { IHome } from '../interfaces/home.interface';
+import {PageSpinnerComponent} from '../components/pageSpinner.component';
 
 const HousesPage = () => {
     const [currentUser, setCurrentUser] = useState<IUser|undefined>();
@@ -29,18 +30,15 @@ const HousesPage = () => {
     }
 
     return (
-        <div>
-            {isLoading ? (
-                <div>Loading...</div>
-            ) : (
-                <div>
-                    {homes?.map((home, index) => (
-                    <div key={index}>
-                        {home.homeName}
-                    </div>
-                    ))}
+        <div>            
+            {isLoading && <PageSpinnerComponent />}
+            <div>
+                {homes?.map((home, index) => (
+                <div key={index}>
+                    {home.homeName}
                 </div>
-            )}            
+                ))}
+            </div>                      
         </div>
     )
 }
