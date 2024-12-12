@@ -23,6 +23,7 @@ async function getHomeById (homeId: number, currentUserId: number) {
         home.trustedNeighbors = await trustedNeighborsRepo.getTrustedNeighborsByHomeId(home.homeId);
         await getRoleForHome(home, currentUserId);
     }
+    console.log('Home', home);
 
     return (home);
 }
