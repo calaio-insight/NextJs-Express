@@ -9,7 +9,7 @@ import { userApi } from "@/services/user/user.api";
 
 const rootReducer = combineReducers({
     [homeApi.reducerPath]: homeApi.reducer,
-    [userApi.reducerPath]: userApi.reducer
+    [userApi.reducerPath]: userApi.reducer,
 })
 const store = configureStore({
     reducer: rootReducer,
