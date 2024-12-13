@@ -40,7 +40,7 @@ async function upsertHome(home: IHome, currentUserId: number){
         else{
             request
                 .input("createdBy", sql.Int, currentUserId)
-                .input("createdDate", sql.DateTime2, home.createdDate)
+                .input("createdDate", sql.DateTime2, new Date())
         }
 
         let response = await request  
@@ -55,7 +55,7 @@ async function upsertHome(home: IHome, currentUserId: number){
             .input("purchasePrice", sql.Decimal, home.purchasePrice)
             .input("notes", sql.NVarChar(sql.MAX), home.notes)
             .input("modifiedBy", sql.Int, currentUserId)
-            .input("modifiedDate", sql.DateTime2, home.modifiedDate)
+            .input("modifiedDate", sql.DateTime2, new Date())
             .output("updatedId", sql.Int)
             .execute("UpsertHome");
         return response.output.updatedId;

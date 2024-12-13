@@ -7,6 +7,7 @@ import { IAuthRequest } from "../interfaces/auth.interface";
 import { useLoginMutation } from "@/services/user/user.api";
 import { IUser } from "../interfaces/user.interface";
 import {PageSpinnerComponent} from "./pageSpinner.component";
+import { useEffect } from "react";
 
 export const NavbarComponent = () => {
     const [doLogin, {data, isLoading}] = useLoginMutation({fixedCacheKey: 'currentUser'});
@@ -25,9 +26,11 @@ export const NavbarComponent = () => {
             .unwrap()
             .then((response: IUser) => {
                 console.log(response);
+                localStorage.setItem('currentUserId', JSON.stringify(response.userId));
             })
             .catch(err => {
                 console.log(err);
+                localStorage.removeItem('currentUserId');
             });
     }
 
@@ -53,7 +56,7 @@ export const NavbarComponent = () => {
                                     <div className={''}>                                    
                                         Welcome, {currentUser.displayName} 
                                     </div>
-                                    <Nav.Link href="/" className={"ps-3"}>
+                                    <Nav.Link href="/" onClick={() => localStorage.removeItem('currentUser')} className={"ps-3"}>
                                         Logout
                                     </Nav.Link>
                                 </div>

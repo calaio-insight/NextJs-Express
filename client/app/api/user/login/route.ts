@@ -10,7 +10,7 @@ export async function POST(req: Request) {
             },
             body: JSON.stringify(reqBody)
         }).then(response => {console.log(response); return response.json()});
-        
+                
         return Response.json(data);   
     }
     catch (err){

@@ -1,15 +1,14 @@
 export async function GET(req: Request, context: {params: { userId: string }}) {
     try {        
         const {userId} = await context.params;
-        console.log("USERID:", userId);
 
-        if (isNaN(+userId)){
+        if (isNaN(+userId) || userId == undefined){
             return Response.json([]);
         }
 
-        const data = await fetch(`http://localhost:8080/api/home/getHomesByUserId?userId=${userId}`)
-                .then(response => {return response.json()});
-        console.log("HOMES RESPONSE", data);
+        const data = await fetch(`http://localhost:8080/api/userTrustedNeighbor/getUserTrustedNeighborsByUserId?userId=${userId}`)
+                .then(response => {console.log(response); return response.json()});
+        console.log("USER TRUSTED NEIGHBOR RESPONSE", data);
         return Response.json(data);   
     }
     catch (err){

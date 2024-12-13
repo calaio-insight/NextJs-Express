@@ -6,9 +6,13 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { homeApi } from '@/services/home/home.api';
 import { userApi } from "@/services/user/user.api";
+import { homeItemApi } from "@/services/homeItem/homeItem.api";
+import { userTrustedNeighborApi } from "@/services/userTrustedNeighbor/userTrustedNeighbor.api";
 
 const rootReducer = combineReducers({
     [homeApi.reducerPath]: homeApi.reducer,
+    [homeItemApi.reducerPath]: homeItemApi.reducer,
+    [userTrustedNeighborApi.reducerPath]: userTrustedNeighborApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
 })
 const store = configureStore({
@@ -16,6 +20,8 @@ const store = configureStore({
     middleware: (getDefaultMiddleware) => 
       getDefaultMiddleware().concat([
         homeApi.middleware,
+        homeItemApi.middleware,
+        userTrustedNeighborApi.middleware,
         userApi.middleware
     ])
   });

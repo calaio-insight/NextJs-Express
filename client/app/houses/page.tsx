@@ -3,17 +3,15 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useGetHomesByUserIdQuery } from '@/services/home/home.api';
 import { useLoginMutation } from '@/services/user/user.api';
-import { IUser } from '../interfaces/user.interface';
 import { IHome } from '../interfaces/home.interface';
 import { PageSpinnerComponent } from '../components/pageSpinner.component';
 import { Button, Card } from 'react-bootstrap';
 
 const HousesPage = () => {
-    const [currentUser, setCurrentUser] = useState<IUser|undefined>();
     const [homes, setHomes] = useState<IHome[]>([]);
-
-    const { data:homesData, isLoading, isError } = useGetHomesByUserIdQuery(currentUser?.userId);    
-    const [, {data}] = useLoginMutation({fixedCacheKey: 'currentUser'});
+        
+    const [, {isLoading: isUserLoading, data: currentUser}] = useLoginMutation({fixedCacheKey: 'currentUser'});
+    const { data:homesData, isLoading, isError } = useGetHomesByUserIdQuery(currentUser?.userId);
 
     const handleShow = () => {
         // todo
@@ -24,20 +22,14 @@ const HousesPage = () => {
             setHomes(homesData);
         }
     }, [homesData])
-
-    useEffect(() => {
-        if (data){
-            setCurrentUser(data);
-        }
-    }, [data])
-
+    
     if (isError){
         return (<div>There has been an error</div>);
     }
 
     return (
         <div>            
-            {isLoading && <PageSpinnerComponent />}
+            {(isLoading || isUserLoading) && <PageSpinnerComponent />}
             <div>
                 <div className={"row mb-3"}>
                     <h4 className={"col"}>Homes</h4>
