@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { IHome } from "@/app/interfaces/home.interface";
 import { ImageWithTooltip } from "../imageWithTooltip.component";
 import { usePermissionsHook } from "@/app/hooks/usePermissions.hook";

@@ -25,7 +25,6 @@ async function getHomeById (homeId: number, currentUserId: number) {
         home.trustedNeighbors = await trustedNeighborsRepo.getTrustedNeighborsByHomeId(home.homeId);
         await getRoleForHome(home, currentUserId);
     }
-    console.log('Home', home);
 
     return (home);
 }
@@ -52,7 +51,6 @@ async function updateHomeImage (homeId: number, currentUserId: number, imagePath
     let isSuccess = await homeRepo.updateHomeImage(homeId, currentUserId, imagePath);
     return isSuccess;
 }
-
 
 async function getRoleForHome(home: IHome, currentUserId: number){
     if (home.createdBy == currentUserId){

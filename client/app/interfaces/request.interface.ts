@@ -1,4 +1,5 @@
 import { IHome } from "./home.interface"
+import { IHomeItem } from "./homeItem.interface"
 
 export interface IHomeRequest {
     homeId: number,
@@ -8,4 +9,9 @@ export interface IHomeRequest {
 export interface IUpsertHomeRequest {
     userId: number|undefined,
     home: IHome
+}
+
+export interface IUpsertHomeItemRequest {
+    userId: number|undefined,
+    homeItem: IHomeItem
 }

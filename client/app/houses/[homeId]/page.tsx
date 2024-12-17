@@ -7,9 +7,9 @@ import { PageSpinnerComponent } from "@/app/components/pageSpinner.component";
 import { usePermissionsHook } from "@/app/hooks/usePermissions.hook";
 import { IHome } from "@/app/interfaces/home.interface";
 import { IHomeItem } from "@/app/interfaces/homeItem.interface";
-import { IHomeRequest, IUpsertHomeRequest } from "@/app/interfaces/request.interface";
+import { IHomeRequest, IUpsertHomeItemRequest, IUpsertHomeRequest } from "@/app/interfaces/request.interface";
 import { useGetHomeByIdQuery, useUpsertHomeMutation } from "@/services/home/home.api";
-import { useGetHomeItemsByHomeIdQuery } from "@/services/homeItem/homeItem.api";
+import { useGetHomeItemsByHomeIdQuery, useUpsertHomeItemMutation } from "@/services/homeItem/homeItem.api";
 import { useLoginMutation } from "@/services/user/user.api";
 import { useGetUserTrustedNeighborsByUserIdQuery } from "@/services/userTrustedNeighbor/userTrustedNeighbor.api";
 import { useParams } from "next/navigation";
@@ -24,7 +24,8 @@ const HousePage = () => {
     const [file, setFile] = useState<File>();
 
     const [, {isLoading: isUserLoading, data: currentUser}] = useLoginMutation({fixedCacheKey: 'currentUser'});
-    const [ doUpsert, {data: savedData, isLoading:isSaveLoading, isError: isSaveError}] = useUpsertHomeMutation();
+    const [ doUpsert, {isLoading:isSaveLoading, isError: isSaveError}] = useUpsertHomeMutation();
+    const [ doItemUpsert, {isError: isItemSaveError}] = useUpsertHomeItemMutation();
     const { data:home, isLoading, isFetching, isError } = useGetHomeByIdQuery(homeRequest);
     const { data: homeItems, isLoading: isHomeItemsLoading } = useGetHomeItemsByHomeIdQuery(home?.homeId);
 
@@ -38,7 +39,6 @@ const HousePage = () => {
 
     const handleSubmit = (formValues: IHome) => {        
         console.log(formValues);
-
         const request: IUpsertHomeRequest = {
             home: formValues,
             userId: currentUser!.userId
@@ -55,8 +55,22 @@ const HousePage = () => {
     }
     
     const handleItemSubmit = (formValues: IHomeItem) => {
-        //todo
+        console.log(formValues);
+        const request: IUpsertHomeItemRequest = {
+            homeItem: formValues,
+            userId: currentUser!.userId
+        }
+
+        doItemUpsert(request)
+            .unwrap()
+            .then((response: number) => {
+                console.log(response);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
+
     const handleUpload = () => {
         //todo
     }
@@ -74,17 +88,17 @@ const HousePage = () => {
 
     return (
         <>
-            {(isFetching || isLoading || isUserLoading) && <PageSpinnerComponent />}
+            {(isFetching || isLoading || isHomeItemsLoading || isSaveLoading || isUserLoading) && <PageSpinnerComponent />}
 
             <div className={"row mb-3"}>
                 <h4 className={"col"}>{home.homeName}</h4>
                 {(isOwner || canEditItems) &&
-                    <Button className="btn btn-primary col-2">+ Create Home Item</Button>
+                    <Button className="btn btn-primary col-2" onClick={handleItemShow}>+ Create Home Item</Button>
                 }
             </div>
 
             <Tab.Container defaultActiveKey={'#basicInfo'}>
-                <HomeTabs home={home} homeItems={[]} />
+                <HomeTabs home={home} homeItems={homeItems || []} />
                 <Tab.Content>
                 {(isOwner || canViewBasic || canEditBasic) &&
                     <Tab.Pane key={"basicInfo"} eventKey={"#basicInfo"}>

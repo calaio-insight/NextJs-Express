@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IHome } from '@/app/interfaces/home.interface';
 import { IHomeRequest, IUpsertHomeRequest } from '@/app/interfaces/request.interface';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';

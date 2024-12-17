@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { usePermissionsHook } from "@/app/hooks/usePermissions.hook";
 import { INeighborOption, IRoleOption } from "@/app/interfaces/options.interface";
 import { ITrustedNeighbor } from "@/app/interfaces/trustedNeighbor.interface";
@@ -18,8 +19,8 @@ interface IUserHomeFormFieldsProps {
 export const UserHomeFormFields = ({home, setFieldValue}:IUserHomeFormFieldsProps
 ) => {
     const {isOwner, canViewAccess, canEditAccess} = usePermissionsHook(home);
-    const [, {isLoading: isUserLoading, data: currentUser}] = useLoginMutation({fixedCacheKey: 'currentUser'});
-    const { data: userTrustedNeighbors, isLoading: isUserTrustedNeighborsLoading } = useGetUserTrustedNeighborsByUserIdQuery(currentUser?.userId);
+    const [ , {data: currentUser} ] = useLoginMutation({fixedCacheKey: 'currentUser'});
+    const { data: userTrustedNeighbors } = useGetUserTrustedNeighborsByUserIdQuery(currentUser?.userId);
     const hideDeleteButton = !isOwner && !canEditAccess;
 
     const [selectedNeighbor, setSelectedNeighbor] = useState<INeighborOption|null>(null);

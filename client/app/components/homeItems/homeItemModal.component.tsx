@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Alert, Button, Form, Modal } from "react-bootstrap";
 import { HomeItemFormFields } from "./homeItemFormFields.component";
 import { Formik } from "formik";
@@ -23,7 +24,7 @@ export const HomeItemModal = (
     }:IHomeItemModalProps
 ) => {
     const handleFormSubmit = (formValues:any) => {
-        for(let key in formValues){
+        for(const key in formValues){
             console.log(key, formValues[key])
         }
         handleSubmit(formValues);
