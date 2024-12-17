@@ -38,3 +38,7 @@ body {
   align-items: center;
   z-index: 1000; /* Ensure it's on top */
 }
+
+.react-datepicker-wrapper {
+  width: 100%;
+}

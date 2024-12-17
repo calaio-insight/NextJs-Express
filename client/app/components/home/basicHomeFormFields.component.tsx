@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { FormDatePicker } from "../formInputs/formDatePicker.component";
 import { FormTextComponent } from "../formInputs/formText.component";
 
 interface IBasicHomeFormFieldsProps {
@@ -76,13 +78,13 @@ export const BasicHomeFormFields = (
             </div>
             <div className={"row"}>
                 <div className={"col"}>                    
-                    {/* <FormDatePicker
+                    <FormDatePicker
                         name={"purchaseDate"}
                         labelText={"Purchase Date"}
                         placeholderText={"Enter Purchase Date"}
                         isDisabled={isBasicDisabled}
                         maxDate={(new Date())}
-                    /> */}
+                    />
                 </div>
                 <div className={"col"}>
                     <FormTextComponent
