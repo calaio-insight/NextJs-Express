@@ -14,7 +14,7 @@ export const UserHomeDisplay = ({homeTrustedNeighbors, handleRemoveNeighbor, hid
     return (
         <>
             <div className={"row mt-3"}>
-                <Table striped bordered style={{width: '60%'}}>
+                <Table className={'ms-2'} striped bordered style={{width: '60%'}}>
                     <thead>
                     <tr>
                         <th>Name</th>

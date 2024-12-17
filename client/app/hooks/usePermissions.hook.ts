@@ -1,13 +1,7 @@
 import { IHome } from "../interfaces/home.interface";
 import { IHomePermissionType } from "../interfaces/homePermission.type";
-import { $enum } from "ts-enum-util";
 
 export function usePermissionsHook(home?: IHome) {
-
-    const roleValues = $enum(IHomePermissionType).getValues();
-    const roleLabels = $enum(IHomePermissionType).getKeys();
-    const test = $enum(IHomePermissionType);
-
     const isOwner = home?.permissions && home.permissions.indexOf(IHomePermissionType.Owner) >= 0;
 
     const canViewBasic = home?.permissions && home.permissions.indexOf(IHomePermissionType.CanViewBasic) >= 0;
@@ -21,8 +15,7 @@ export function usePermissionsHook(home?: IHome) {
 
     const canViewFiles = home?.permissions && home.permissions.indexOf(IHomePermissionType.CanViewFiles) >= 0;
     const canEditFiles = home?.permissions && home.permissions.indexOf(IHomePermissionType.CanEditFiles) >= 0;
-    
-    
+        
     return {
         isOwner,
         canViewBasic,

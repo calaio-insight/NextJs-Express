@@ -51,7 +51,7 @@ export const HomeBasicTab = (
                 setFloating={refs.setFloating}
                 floatingStyles={floatingStyles}
                 getFloatingProps={getFloatingProps}
-                imgSrc={home?.homePhoto}
+                imgSrc={home?.homePhoto || ""}
                 imgAlt={"Home Icon"}
                 handleImageClick={handleImageClick}
                 setReference={refs.setReference}
@@ -105,7 +105,7 @@ export const HomeBasicTab = (
                                 type={"button"}
                                 onClick={() => handleSubmit(values)}
                                 disabled={!(dirty && isValid)}
-                                className={!(dirty && isValid) ? "disabled-btn" : ""}
+                                className={!(dirty && isValid) ? "disabled-btn mb-3" : "mb-3"}
                             >
                                 Save Changes
                             </Button>

@@ -1,5 +1,7 @@
 import { IHome } from "../interfaces/home.interface";
+import { IHomePermissionType } from "../interfaces/homePermission.type";
 import { IHomeRoleType } from "../interfaces/homeRole.type";
+import { IHomeRolePermission } from "../interfaces/homeRolePermission";
 
 const homeRepo = require('../dataAccess/home.repository');
 const trustedNeighborsRepo = require('../dataAccess/trustedNeighbor.repository');
@@ -64,7 +66,12 @@ async function getRoleForHome(home: IHome, currentUserId: number){
     }
 
     // Get permissions
-    home.permissions = await roleRepo.getHomePermissionsByRoleId(home.role ?? IHomeRoleType.Viewer);
+    home.permissions = await getHomePermissionsByRole(home.role ?? IHomeRoleType.Viewer);
+}
+
+async function getHomePermissionsByRole(homeRole: IHomeRoleType) : Promise<IHomePermissionType[]>{
+    const homePermissions = await roleRepo.getHomePermissionsByRoleId(homeRole ?? IHomeRoleType.Viewer);
+    return homePermissions.map((h: IHomeRolePermission) => h.homePermissionId);  
 }
 
 

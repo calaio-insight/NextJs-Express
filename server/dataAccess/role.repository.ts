@@ -2,7 +2,7 @@ import sql = require('mssql');
 import { IHomeRoleType } from '../interfaces/homeRole.type';
 var dbConfig = require("../config/dbConfig");
 
-async function getHomePermissionsByRoleId(homeRole: IHomeRoleType){
+async function getHomePermissionsByRoleId(homeRole: IHomeRoleType) {
     try{
         let pool = await sql.connect(dbConfig);
         let response = await pool.request()
@@ -12,6 +12,7 @@ async function getHomePermissionsByRoleId(homeRole: IHomeRoleType){
     }
     catch(error){
         console.log(error);
+        return [];
     }
 }
 

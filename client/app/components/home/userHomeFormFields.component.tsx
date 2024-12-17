@@ -35,7 +35,7 @@ export const UserHomeFormFields = ({home, setFieldValue}:IUserHomeFormFieldsProp
         const roleLabels = $enum(IHomeRoleType).getKeys();
         
         for (let i = 0; i < roleValues.length; i++) {
-            let newOption: IRoleOption = {
+            const newOption: IRoleOption = {
                 label: roleLabels[i],
                 value: roleValues[i]
             }
@@ -45,7 +45,7 @@ export const UserHomeFormFields = ({home, setFieldValue}:IUserHomeFormFieldsProp
     }
     const mapNeighborOptions = () => {
         userTrustedNeighbors?.map((neighbor) => {
-            let newOption:INeighborOption = {
+            const newOption:INeighborOption = {
                 label: neighbor.displayName,
                 value: {homeId: home.homeId, userId: neighbor.trustedUserId, displayName: neighbor.displayName},
             }
@@ -53,7 +53,7 @@ export const UserHomeFormFields = ({home, setFieldValue}:IUserHomeFormFieldsProp
             //If trusted neighbor is already added to this home
             if (homeTrustedNeighbors.filter(x => x.userId === neighbor.trustedUserId).length > 0){
                 //Remove from options
-                let neighbors = neighborOptions.filter(n => n.value.userId != neighbor.trustedUserId);
+                const neighbors = neighborOptions.filter(n => n.value.userId != neighbor.trustedUserId);
                 setNeighborOptions(neighbors);
             }
             else{
@@ -66,7 +66,7 @@ export const UserHomeFormFields = ({home, setFieldValue}:IUserHomeFormFieldsProp
     }
        
     const handleRemoveNeighbor = (neighborUserId: number) => {
-        let neighbors = homeTrustedNeighbors.filter(n => n.userId != neighborUserId);
+        const neighbors = homeTrustedNeighbors.filter(n => n.userId != neighborUserId);
         setHomeTrustedNeighbors(neighbors);        
     }
 
@@ -102,7 +102,7 @@ export const UserHomeFormFields = ({home, setFieldValue}:IUserHomeFormFieldsProp
         if (userTrustedNeighbors){
             mapNeighborOptions();
         }
-    }, [userTrustedNeighbors])
+    }, [userTrustedNeighbors, homeTrustedNeighbors])
 
     useEffect(() => {
         if (currentUser){

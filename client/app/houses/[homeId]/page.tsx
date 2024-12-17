@@ -7,8 +7,8 @@ import { PageSpinnerComponent } from "@/app/components/pageSpinner.component";
 import { usePermissionsHook } from "@/app/hooks/usePermissions.hook";
 import { IHome } from "@/app/interfaces/home.interface";
 import { IHomeItem } from "@/app/interfaces/homeItem.interface";
-import { IHomeRequest } from "@/app/interfaces/request.interface";
-import { useGetHomeByIdQuery } from "@/services/home/home.api";
+import { IHomeRequest, IUpsertHomeRequest } from "@/app/interfaces/request.interface";
+import { useGetHomeByIdQuery, useUpsertHomeMutation } from "@/services/home/home.api";
 import { useGetHomeItemsByHomeIdQuery } from "@/services/homeItem/homeItem.api";
 import { useLoginMutation } from "@/services/user/user.api";
 import { useGetUserTrustedNeighborsByUserIdQuery } from "@/services/userTrustedNeighbor/userTrustedNeighbor.api";
@@ -24,7 +24,8 @@ const HousePage = () => {
     const [file, setFile] = useState<File>();
 
     const [, {isLoading: isUserLoading, data: currentUser}] = useLoginMutation({fixedCacheKey: 'currentUser'});
-    const { data:home, isLoading, isError } = useGetHomeByIdQuery(homeRequest);
+    const [ doUpsert, {data: savedData, isLoading:isSaveLoading, isError: isSaveError}] = useUpsertHomeMutation();
+    const { data:home, isLoading, isFetching, isError } = useGetHomeByIdQuery(homeRequest);
     const { data: homeItems, isLoading: isHomeItemsLoading } = useGetHomeItemsByHomeIdQuery(home?.homeId);
 
     // Preload trusted neighbor data for current user
@@ -35,9 +36,24 @@ const HousePage = () => {
     const handleItemClose = () => setShowItemModal(false);
     const handleItemShow = () => setShowItemModal(true);
 
-    const handleSubmit = (formValues: IHome) => {
-        //todo
+    const handleSubmit = (formValues: IHome) => {        
+        console.log(formValues);
+
+        const request: IUpsertHomeRequest = {
+            home: formValues,
+            userId: currentUser!.userId
+        }
+        
+        doUpsert(request)
+            .unwrap()
+            .then((response: number) => {
+                console.log(response);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
+    
     const handleItemSubmit = (formValues: IHomeItem) => {
         //todo
     }
@@ -58,7 +74,7 @@ const HousePage = () => {
 
     return (
         <>
-            {(isLoading || isUserLoading) && <PageSpinnerComponent />}
+            {(isFetching || isLoading || isUserLoading) && <PageSpinnerComponent />}
 
             <div className={"row mb-3"}>
                 <h4 className={"col"}>{home.homeName}</h4>
