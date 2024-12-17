@@ -6,10 +6,11 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 export const homeApi = createApi({
     reducerPath: 'home',
     baseQuery: fetchBaseQuery({ baseUrl: '/api/' }),
-    tagTypes: ['HomeById'],
+    tagTypes: ['HomeById', 'Homes'],
     endpoints: (builder) => ({
       getHomesByUserId: builder.query<IHome[], number|undefined>({
-        query: (userId) => `/home/getHomesByUserId/${userId}`
+        query: (userId) => `/home/getHomesByUserId/${userId}`,
+        providesTags: (_) => ['Homes']
       }),
       getHomeById: builder.query<IHome, IHomeRequest|undefined>({
         query: (homeRequest) => `/home/getHomeById/${homeRequest?.homeId}/${homeRequest?.userId}`,
@@ -21,7 +22,7 @@ export const homeApi = createApi({
             method: 'POST',
             body: upsertRequest?.home
         }),
-        invalidatesTags: (_) => ['HomeById']
+        invalidatesTags: (_) => ['HomeById', 'Homes']
       }),
     })
   });

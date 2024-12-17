@@ -35,7 +35,8 @@ export const HomeBasicTab = (
     const {refs, getReferenceProps, isOpen, floatingStyles, getFloatingProps} = useTooltip();
     const {isOwner, canViewBasic, canEditBasic, canViewAccess, canEditAccess} = usePermissionsHook(home);
     const isBasicDisabled = !isOwner && !canEditBasic;  
-            
+    const noImgPath = '/noImg.jpg';        
+
     const handleImageClick = () => {
         setShowImageModal(true);
     }
@@ -52,7 +53,7 @@ export const HomeBasicTab = (
                 setFloating={refs.setFloating}
                 floatingStyles={floatingStyles}
                 getFloatingProps={getFloatingProps}
-                imgSrc={home?.homePhoto || ""}
+                imgSrc={home?.homePhoto || noImgPath}
                 imgAlt={"Home Icon"}
                 handleImageClick={handleImageClick}
                 setReference={refs.setReference}

@@ -1,20 +1,43 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useGetHomesByUserIdQuery } from '@/services/home/home.api';
+import { useGetHomesByUserIdQuery, useUpsertHomeMutation } from '@/services/home/home.api';
 import { useLoginMutation } from '@/services/user/user.api';
 import { IHome } from '../interfaces/home.interface';
 import { PageSpinnerComponent } from '../components/pageSpinner.component';
 import { Button, Card } from 'react-bootstrap';
+import { HomeModal } from '../components/home/homeModal.component';
+import { IUpsertHomeRequest } from '../interfaces/request.interface';
 
 const HousesPage = () => {
     const [homes, setHomes] = useState<IHome[]>([]);
-        
+    const [show, setShow] = useState(false);   
+    const noImgPath = '/noImg.jpg'; 
+
     const [, {isLoading: isUserLoading, data: currentUser}] = useLoginMutation({fixedCacheKey: 'currentUser'});
     const { data:homesData, isLoading, isError } = useGetHomesByUserIdQuery(currentUser?.userId);
+    const [ doUpsert, {isLoading:isSaveLoading, isError: isSaveError}] = useUpsertHomeMutation();
 
-    const handleShow = () => {
-        // todo
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    const handleSubmit = (formValues: IHome) => {        
+        console.log(formValues);
+        const request: IUpsertHomeRequest = {
+            home: formValues,
+            userId: currentUser!.userId
+        }
+        
+        doUpsert(request)
+            .unwrap()
+            .then((response: number) => {
+                console.log(response);
+                handleClose();
+            })
+            .catch(err => {
+                console.log(err);
+                handleClose();
+            });
     }
 
     useEffect(() => {
@@ -23,13 +46,13 @@ const HousesPage = () => {
         }
     }, [homesData])
     
-    if (isError){
+    if (isError || isSaveError){
         return (<div>There has been an error</div>);
     }
 
     return (
         <div>            
-            {(isLoading || isUserLoading) && <PageSpinnerComponent />}
+            {(isLoading || isUserLoading || isSaveLoading) && <PageSpinnerComponent />}
             <div>
                 <div className={"row mb-3"}>
                     <h4 className={"col"}>Homes</h4>
@@ -38,13 +61,13 @@ const HousesPage = () => {
                 {homes.length > 0 ?
                     <div className={'row'}>
                         {homes?.map((home, index) => (
-                            <Card key={index} style={{width: '18rem'}} className={'mx-2'}>
-                                <Card.Img variant="top" src={home.homePhoto} style={{height: "10rem"}} />
+                            <Card key={index} style={{width: '18rem'}} className={'m-2'}>
+                                <Card.Img variant="top" src={home.homePhoto || noImgPath} style={{height: "10rem"}} />
                                 <Card.Body>
                                     <Card.Title>{home.homeName}</Card.Title>
                                     <Card.Text>
-                                        Some quick example text to build on the card title and make up the
-                                        bulk of the card&apos;s content.
+                                        {home.address} <br />
+                                        {home.notes}
                                     </Card.Text>                                        
                                     <Link className={"btn btn-primary"} href={"/houses/" + home.homeId} >More Details</Link>
                                 </Card.Body>
@@ -53,6 +76,11 @@ const HousesPage = () => {
                     </div>
                     : <div>No homes created yet.</div>
                 }
+
+                <HomeModal modalTitle={"Create Home"}
+                       show={show}
+                       handleClose={handleClose}
+                       handleSubmit={handleSubmit} />
             </div>                      
         </div>
     )

@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap";
 
@@ -21,7 +23,8 @@ export const ImageUploadModal = (
     const handleFileChange = (e: any) => {
         if (e.target.files){
             setFile(e.target.files[0]);
-            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             setPreview(URL.createObjectURL(e.target.files[0]));
         }
     }

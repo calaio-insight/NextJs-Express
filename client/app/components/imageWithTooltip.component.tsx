@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {FloatingPortal} from "@floating-ui/react";
 
 interface IImageWithTooltipProps {
