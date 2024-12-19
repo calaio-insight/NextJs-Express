@@ -7,7 +7,8 @@ import { PageSpinnerComponent } from "@/app/components/pageSpinner.component";
 import { usePermissionsHook } from "@/app/hooks/usePermissions.hook";
 import { IHome } from "@/app/interfaces/home.interface";
 import { IHomeItem } from "@/app/interfaces/homeItem.interface";
-import { IHomeRequest, IUpsertHomeItemRequest, IUpsertHomeRequest } from "@/app/interfaces/request.interface";
+import { IHomeRequest, IUploadHomeIconRequest, IUpsertHomeItemRequest, IUpsertHomeRequest } from "@/app/interfaces/request.interface";
+import { useUploadHomeIconMutation } from "@/services/file/file.api";
 import { useGetHomeByIdQuery, useUpsertHomeMutation } from "@/services/home/home.api";
 import { useGetHomeItemsByHomeIdQuery, useUpsertHomeItemMutation } from "@/services/homeItem/homeItem.api";
 import { useLoginMutation } from "@/services/user/user.api";
@@ -26,6 +27,7 @@ const HousePage = () => {
     const [, {isLoading: isUserLoading, data: currentUser}] = useLoginMutation({fixedCacheKey: 'currentUser'});
     const [ doUpsert, {isLoading:isSaveLoading, isError: isSaveError}] = useUpsertHomeMutation();
     const [ doItemUpsert, {isError: isItemSaveError}] = useUpsertHomeItemMutation();
+    const [ doHomeIconUpload ] = useUploadHomeIconMutation();
     const { data:home, isLoading, isFetching, isError } = useGetHomeByIdQuery(homeRequest);
     const { data: homeItems, isLoading: isHomeItemsLoading } = useGetHomeItemsByHomeIdQuery(home?.homeId);
 
@@ -72,7 +74,29 @@ const HousePage = () => {
     }
 
     const handleUpload = () => {
-        //todo
+        if (!file || !home || !currentUser){
+            alert("Must select file.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const request: IUploadHomeIconRequest = {
+            userId: currentUser!.userId,
+            homeId: home.homeId,
+            file: formData
+        }
+
+        doHomeIconUpload(request)
+            .unwrap()
+            .then((response: any) => {
+                console.log(response);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+
     }
     const handleHomeItemUpload = (homeItemId: number) => {
         //todo

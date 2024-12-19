@@ -10,6 +10,7 @@ const homeController = require('./controllers/home.controller');
 const homeItemController = require('./controllers/homeItem.controller');
 const userTrustedNeighborController = require('./controllers/userTrustedNeighbor.controller');
 const userController = require('./controllers/user.controller');
+const fileController = require('./controllers/file.controller');
 
 app.use(cors());
 
@@ -23,6 +24,7 @@ app.use('/api/home', homeController);
 app.use('/api/user', userController);
 app.use('/api/homeItem', homeItemController);
 app.use('/api/userTrustedNeighbor', userTrustedNeighborController);
+app.use('/api/file', fileController);
 
 
 // Start the server and listen on the specified port

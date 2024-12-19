@@ -15,3 +15,9 @@ export interface IUpsertHomeItemRequest {
     userId: number|undefined,
     homeItem: IHomeItem
 }
+
+export interface IUploadHomeIconRequest {
+    userId: number|undefined,
+    homeId: number,
+    file: FormData
+}
